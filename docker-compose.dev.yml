@@ -1,0 +1,28 @@
+#for Development 
+version: '3'
+services:
+  nginx:
+    ports:
+      - "3000:80"
+  node-app:
+  #overwrite on build on docker-compose
+    build: 
+    #context == build:. but this way when we are send args
+      context: .
+      args:
+        NODE_ENV: development
+    volumes:
+      # to make bind mount which make folde work synchro
+      - ./:/app # bind amount volume
+      - /app/node_modules #anonymous volume
+      #in development put we set in environment NODE_ENV=development  ==> in production we set NODE_ENV=production
+    environment:
+      - NODE_ENV=development
+      # user name as a variable to connect in DB  
+      - MONGO_USER=ahmed
+      - MONGO_PASSWORD=123456
+      - SEESION_SECRET=secret
+    #to override on CMD in Dockerfile
+    command: npm run dev
+
+ 

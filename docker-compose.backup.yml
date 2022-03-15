@@ -1,0 +1,20 @@
+version: '3'
+# services meaning containers and that can hold many of containers such node-app in below this name can be any name
+services:
+  node-app:
+    # bulid for build image and that  given path of Dockerfile which . in this case
+    # when he bulid image this name is name of project folder _ name of container folder so the name will be docker_node-app
+    build: .
+    #  ports mean which port will the project run on it  and that can have multiple values
+    ports:
+      - "3000:3000"
+    #this volumes to using bind mount <==> and to prevent override on node_modules
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    #to make env variable and can be used .env file when there is multiple variable but in this case we have single variable
+    environment:
+      - PORT=3000
+    # env_file:
+    #   - ./.env
+  

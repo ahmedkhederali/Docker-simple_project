@@ -1,0 +1,28 @@
+# put Shared between Production and Development
+version: '3'
+services:
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+  node-app:
+    # build image 
+    build: .
+    environment:
+      - PORT=3000
+      # meaning node-app depend on mongo so first run mongo then run node-app
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=ahmed 
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    volumes:
+      - mongo-db:/data/db # called name volume ==> this called anonymous volume (/data/db) to conver to name volume (mongo-db:/data/db)
+  redis:
+    image: redis
+volumes:
+  mongo-db:
